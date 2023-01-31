@@ -14,6 +14,9 @@ const Styles = {
   Content: styled.div`
     cursor: pointer;
   `,
+  Image: styled.img`
+    width: 25px;
+  `,
   Action: styled.div`
     cursor: pointer;
     display: flex;

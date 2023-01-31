@@ -7,6 +7,33 @@ import Card from '../../components/Card';
 import Modal from '../../components/Modal'
 import { Styles as S } from './MainPage.style';
 
+// Dummies data
+// const dummies = [{
+//   id: 1,
+//   firstName: 'Dummy',
+//   lastName: 'Data',
+//   age: 1,
+//   photo: 'www.photo.com'
+// },{
+//   id: 2,
+//   firstName: 'Yahoo',
+//   lastName: 'Google',
+//   age: 1,
+//   photo: 'www.photo.com'
+// },{
+//   id: 3,
+//   firstName: 'Oke',
+//   lastName: 'Boys',
+//   age: 1,
+//   photo: 'www.photo.com'
+// },{
+//   id: 4,
+//   firstName: 'Facebook',
+//   lastName: 'Instagram',
+//   age: 1,
+//   photo: 'www.photo.com'
+// }]
+
 const getData = async (setContacts) => {
   try {
     const response = await axios.get('https://contact.herokuapp.com/contact');
@@ -51,7 +78,7 @@ const MainPage = () => {
       <Button onClick={() => setDisplayModal(true)}>Create Contact</Button>
       <S.Contacts>
         {contacts.map((contact) => 
-          <Card contact={contact} onDelete={(id) => onDelete(id, contacts, setContacts)} onUpdate={() => {}}/>
+          <Card key={contact.id} contact={contact} onDelete={(id) => onDelete(id, contacts, setContacts)} onUpdate={() => {}}/>
         )}
       </S.Contacts>
     </S.WrapperMainPage>
