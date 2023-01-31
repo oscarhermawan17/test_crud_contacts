@@ -13,9 +13,13 @@ const getData = async (setContacts) => {
   }
 }
 
-function MainPage() {
-  const [contacts, setContacts] = useState([])
+const onDelete = (id, contacts, setContacts) => {
+  const tmp = contacts.filter((contact) => id !== contact.id)
+  setContacts(tmp);
+}
 
+const MainPage = () => {
+  const [contacts, setContacts] = useState([])
 
   useEffect(() => {
     getData(setContacts)
@@ -23,13 +27,12 @@ function MainPage() {
 
 
   return (
-    <div>
-      {/* {contacts.map((contact) => 
-        <Card contact={contact} />
-      )} */}
-      {contacts.length > 0 && <Card contact={contacts[0]} />}
-    </div>
+    <S.WrapperMainPage>
+      {contacts.map((contact) => 
+        <Card contact={contact} onDelete={(id) => onDelete(id, contacts, setContacts)} onUpdate={() => {}}/>
+      )}
+    </S.WrapperMainPage>
   )
 }
 
-export default MainPage
+export default MainPage;

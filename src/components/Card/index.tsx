@@ -4,39 +4,55 @@ import { useState } from 'react';
 import Modal from '../Modal'
 import { Styles as S } from './Card.style';
 
-const setModalDelete = (setModal, setDisplay, fullName) => {
+const fullName = (contact) => `${contact.firstName} ${contact.lastName}`;
+
+const setModalDelete = (setModal, setDisplayModal, onDelete, id) => {
   setModal((prevState) => {
     return {
       ...prevState,
-      onActionTitle: 'Test',
-      body: <span>Are you sure delete {fullName}?</span>
+      onAction: () => onDelete(id)
     }
   })
-  setDisplay(true);
+  setDisplayModal('delete');
 }
 
-const fullName = (contact) => `${contact.firstName} ${contact.lastName}`;
+// Refactor?
+const modalView = (modal, displayModal, contact) => {
+  return (
+    <>
+      {displayModal === 'read' && <Modal {...modal}>
+        read
+      </Modal>}
+      {displayModal === 'update' && <Modal {...modal}>
+        edit
+      </Modal>}
+      {displayModal === 'delete' && <Modal {...modal}>
+        <span>Are you sure delete {fullName(contact)}?</span>
+      </Modal>}
+    </>
+  )
+}
 
-const Card = ({ contact }: any) => {
-  const [displayModal, setDisplay] = useState(false);
+const Card = ({ contact, onDelete, onUpdate }: any) => {
+  const [displayModal, setDisplayModal] = useState('');
   const [modal, setModal] = useState({
-    onAction: () => setDisplay(false),
+    onAction: () => setDisplayModal(''),
     onActionTitle: 'Yes',
-    cancel: () => setDisplay(false),
+    cancel: () => setDisplayModal(''),
     cancelTitle: 'No',
   })
 
   return (
     <S.WrapperCard>
-      {displayModal ? <Modal {...modal} /> : null}
+      {modalView(modal, displayModal, contact)}
       <S.Content onClick={() => alert('oke')}>
         {fullName(contact)}
       </S.Content>
       <S.Action>
-        <div onClick={() => setDisplay(true)}>
+        <div onClick={() => setDisplayModal('edit')}>
           -
         </div>
-        <div onClick={() => setModalDelete(setModal, setDisplay, fullName(contact))}>
+        <div onClick={() => setModalDelete(setModal, setDisplayModal, onDelete, contact.id)}>
           X
         </div>
       </S.Action>

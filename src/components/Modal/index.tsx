@@ -6,14 +6,14 @@ const Modal = ({
   onActionTitle = 'Yes',
   cancel,
   cancelTitle = 'No',
-  body
+  children
 }: any) => {
 
   return (
     <S.WrapperModal>
       <S.Content>
         <S.Body>
-          {body}
+          {children}
         </S.Body>
         <S.Footer>
           <Button variant={"error"} onClick={onAction}>{onActionTitle}</Button> &nbsp;
