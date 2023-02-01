@@ -6,10 +6,29 @@ import Button from '../../components/Button';
 import Card from '../../components/Card';
 import Modal from '../../components/Modal'
 import { Styles as S } from './MainPage.style';
-import { fetchContacts, createContact, removeError } from '../../app/store';
+import {
+  fetchContacts,
+  getSingleContact,
+  createContact,
+  removeError,
+  updateContact,
+  updateSingleContact
+} from '../../app/store';
 
-// Delete Error (API)
+// Delete Error (API), dont need fix this
 const onDelete = (id, setDisplayModal) => {
+  setDisplayModal(false);
+}
+
+const initialFormState = {
+  firstName: '',
+  lastName: '',
+  age: 0,
+  photo: ''
+}
+
+const onClear = (setFormContact, setDisplayModal) => {
+  setFormContact(initialFormState);
   setDisplayModal(false);
 }
 
@@ -23,11 +42,13 @@ const handleCreateContact = (dispatch, formContact, setDisplayModal) => {
   setDisplayModal(false);
 };
 
-const initialFormState = {
-  firstName: '',
-  lastName: '',
-  age: 0,
-  photo: ''
+const handleUpdateContact = (dispatch, contactSingle, contacts, setUpdateContactModal) => {
+  dispatch(updateSingleContact({ ...contactSingle, contacts }));
+  setUpdateContactModal(false);
+};
+
+const getContactById = (dispatch, getSingleContact, id) => {
+  dispatch(getSingleContact(id))
 }
 
 const MainPage = () => {
@@ -35,16 +56,29 @@ const MainPage = () => {
   const loading = useSelector((state) => state.contacts.loading);
   const error = useSelector((state) => state.contacts.error);
   const errorCreate = useSelector((state) => state.contacts.errorCreate);
+
+  const contactSingle = useSelector((state) => state.contactSingle.contact);
+
   const dispatch = useDispatch();
 
   const [displayModal, setDisplayModal] = useState(false);
   const [errorModal, setErrorModal] = useState(false)
+  const [updateContactModal, setUpdateContactModal] = useState(false)
 
   const modal = {
     onAction: () => handleCreateContact(dispatch, formContact, setDisplayModal),
     onActionTitle: 'Save',
-    cancel: () => setDisplayModal(false),
+    cancel: () => onClear(setFormContact, setDisplayModal),
     cancelTitle: 'Cancel',
+    actionVariant: 'success'
+  }
+
+  const modalUpdateContact = {
+    onAction: () => handleUpdateContact(dispatch, contactSingle, contacts, setUpdateContactModal),
+    onActionTitle: 'Save',
+    cancel: () => setUpdateContactModal(false),
+    cancelTitle: 'Cancel',
+    actionVariant: 'success'
   }
 
   const modalError = {
@@ -64,6 +98,13 @@ const MainPage = () => {
     }
   }, [errorCreate])
 
+  // GET SINGLE (FOR UPDATE, AND OPEN MODAL)
+  useEffect(() => {
+    if(contactSingle) {
+      setUpdateContactModal(true);
+    }
+  }, [contactSingle])
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -72,22 +113,40 @@ const MainPage = () => {
     return <div>Error: {error}</div>;
   }
 
+  const changeValue = (value, entity) => {
+    setFormContact((prevState) => {
+      return {
+        ...prevState,
+        [entity]: value
+      }
+    })
+  }
+
   return (
     <S.WrapperMainPage>
       {displayModal &&
         <Modal {...modal}>
-          <Form onChange={setFormContact} value={formContact} />
+          <Form onChange={({ value, entity }) => changeValue(value, entity)} value={formContact} />
         </Modal>}
 
-      {errorModal && 
+      {updateContactModal &&
+        <Modal {...modalUpdateContact}>
+          <Form onChange={({ value, entity }) => dispatch(updateContact({ value, entity }))} value={contactSingle} />
+        </Modal>}
+
+      {errorModal &&
         <Modal {...modalError}>
           <p>{errorCreate}</p>
         </Modal>}
+
       <Button onClick={() => setDisplayModal(true)}>Create Contact</Button>
 
       <S.Contacts>
         {contacts.map((contact) =>
-          <Card key={contact.id} contact={contact} onDelete={(id) => onDelete(id, setDisplayModal)} onUpdate={() => {}}/>
+          <Card
+            key={contact.id} contact={contact} onDelete={(id) => onDelete(id, setDisplayModal)}
+            onUpdate={() => getContactById(dispatch, getSingleContact, contact.id)}
+          />
         )}
       </S.Contacts>
     </S.WrapperMainPage>

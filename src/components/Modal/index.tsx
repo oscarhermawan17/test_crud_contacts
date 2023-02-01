@@ -4,6 +4,7 @@ import Button from '../Button';
 const Modal = ({
   onAction,
   onActionTitle = 'Yes',
+  actionVariant,
   cancel,
   cancelTitle = 'No',
   children
@@ -16,7 +17,7 @@ const Modal = ({
           {children}
         </S.Body>
         <S.Footer>
-          {onAction && <Button variant={"error"} onClick={onAction}>{onActionTitle}</Button>} &nbsp;
+          {onAction && <Button variant={actionVariant} onClick={onAction}>{onActionTitle}</Button>} &nbsp;
           <Button onClick={cancel}>{cancelTitle}</Button>
         </S.Footer>
       </S.Content>

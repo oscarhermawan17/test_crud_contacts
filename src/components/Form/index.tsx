@@ -1,21 +1,12 @@
 import { Styles as S } from './Form.style';
 
-const changeValue = (value, onChange, entity) => {
-  onChange((prevState) => {
-    return {
-      ...prevState,
-      [entity]: value
-    }
-  })
-}
-
 const Form = ({ onChange, value }) => {
   return (
     <S.WrapperForm>
-      First Name <S.InputText value={value.firstName} onChange={(e) => changeValue(e.target.value, onChange, 'firstName')}/>
-      Last Name <S.InputText value={value.lastName} onChange={(e) => changeValue(e.target.value, onChange, 'lastName')} />
-      Age <S.InputText type="number" value={value.age} onChange={(e) => changeValue(Number(e.target.value), onChange, 'age')}/>
-      Photo <S.InputText value={value.photo} onChange={(e) => changeValue(e.target.value, onChange, 'photo')}/>
+      First Name <S.InputText value={value.firstName} onChange={(e) => onChange({ value: e.target.value, entity: 'firstName' })}/>
+      Last Name <S.InputText value={value.lastName} onChange={(e) => onChange({ value: e.target.value, entity: 'lastName' })}/>
+      Age <S.InputText type="number" value={value.age} onChange={(e) => onChange({ value: e.target.value, entity: 'age' })}/>
+      Photo <S.InputText value={value.photo} onChange={(e) => onChange({ value: e.target.value, entity: 'photo' })}/>
     </S.WrapperForm>
   )
 }

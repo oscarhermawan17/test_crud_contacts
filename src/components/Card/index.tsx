@@ -25,9 +25,6 @@ const modalView = (modal, displayModal, contact) => {
       {displayModal === 'read' && <Modal {...modal}>
         read
       </Modal>}
-      {displayModal === 'update' && <Modal {...modal}>
-        edit
-      </Modal>}
       {displayModal === 'delete' && <Modal {...modal}>
         <span>Are you sure delete {fullName(contact)}?</span>
       </Modal>}
@@ -42,6 +39,7 @@ const Card = ({ contact, onDelete, onUpdate }: any) => {
     onActionTitle: 'Yes',
     cancel: () => setDisplayModal(''),
     cancelTitle: 'No',
+    actionVariant: 'error'
   })
 
   return (
@@ -51,7 +49,7 @@ const Card = ({ contact, onDelete, onUpdate }: any) => {
         {fullName(contact)}
       </S.Content>
       <S.Action>
-        <S.Image src={UpdateIcon} alt="Update" onClick={() => setDisplayModal('edit')}/> &nbsp;
+        <S.Image src={UpdateIcon} alt="Update" onClick={onUpdate}/> &nbsp;
         <S.Image src={DeleteIcon} alt="Delete" onClick={() => setModalDelete(setModal, setDisplayModal, onDelete, contact.id)}/>
       </S.Action>
     </S.WrapperCard>

@@ -5,7 +5,8 @@ const Styles = {
     
   `,
   Contacts: styled.div`
-   display: grid;
+    margin-top: 1rem;
+    display: grid;
     gap: 1rem 1rem;
     grid-template-columns: auto auto auto;
   `,
