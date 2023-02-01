@@ -11,11 +11,20 @@ const Styles = {
       border: solid 1px gray;
     }
   `,
+  WrapperRead: styled.div`
+    padding: 0 1.25rem;
+    font-size: 1.125rem;
+  `,
   Content: styled.div`
     cursor: pointer;
   `,
   Image: styled.img`
     width: 25px;
+  `,
+  ImageContact: styled.img`
+    display: block;
+    margin: auto;
+    width: 50%;
   `,
   Action: styled.div`
     cursor: pointer;

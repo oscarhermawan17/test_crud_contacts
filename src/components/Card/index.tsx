@@ -8,14 +8,37 @@ import { Styles as S } from './Card.style';
 
 const fullName = (contact) => `${contact.firstName} ${contact.lastName}`;
 
+const readContact = ({ firstName, lastName, age, photo }) => {
+  return (
+    <S.WrapperRead>
+      <S.ImageContact src={photo} alt={'image'}/> <br/>
+      <span>First Name: {firstName}</span> <br/>
+      <span>Last Name: {lastName}</span> <br/>
+      <span>Age: {age}</span>
+    </S.WrapperRead>
+  )
+}
+
 const setModalDelete = (setModal, setDisplayModal, onDelete, id) => {
   setModal((prevState) => {
     return {
       ...prevState,
-      onAction: () => onDelete(id)
+      onAction: () => {},
+      cancelTitle: 'No', // () => onDelete(id)
     }
   })
   setDisplayModal('delete');
+}
+
+const setModalReadContact = (setModal, setDisplayModal) => {
+  setModal((prevState) => {
+    return {
+      ...prevState,
+      onAction: null,
+      cancelTitle: 'OK',
+    }
+  })
+  setDisplayModal('read');
 }
 
 // Refactor?
@@ -23,7 +46,7 @@ const modalView = (modal, displayModal, contact) => {
   return (
     <>
       {displayModal === 'read' && <Modal {...modal}>
-        read
+        {readContact(contact)}
       </Modal>}
       {displayModal === 'delete' && <Modal {...modal}>
         <span>Are you sure delete {fullName(contact)}?</span>
@@ -35,17 +58,14 @@ const modalView = (modal, displayModal, contact) => {
 const Card = ({ contact, onDelete, onUpdate }: any) => {
   const [displayModal, setDisplayModal] = useState('');
   const [modal, setModal] = useState({
-    onAction: () => setDisplayModal(''),
-    onActionTitle: 'Yes',
     cancel: () => setDisplayModal(''),
-    cancelTitle: 'No',
     actionVariant: 'error'
   })
 
   return (
     <S.WrapperCard>
       {modalView(modal, displayModal, contact)}
-      <S.Content onClick={() => alert('oke')}>
+      <S.Content onClick={() => setModalReadContact(setModal, setDisplayModal)}>
         {fullName(contact)}
       </S.Content>
       <S.Action>
