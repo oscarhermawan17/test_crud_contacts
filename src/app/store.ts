@@ -37,7 +37,11 @@ const contactsSlice = createSlice({
     error: '',
     errorCreate: '',
   },
-  reducers: {},
+  reducers: {
+    removeError: (state) => {
+      state.errorCreate = ''
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchContacts.pending, (state) => {
       state.loading = true;
@@ -59,17 +63,13 @@ const contactsSlice = createSlice({
       state.loading = true;
     })
     builder.addCase(createContact.fulfilled, (state, action) => {
-      console.log('fullfilled', action)
       state.contacts = [...state.contacts, action.payload];
       state.loading = false;
       state.error = '';
       state.errorCreate = '';
     })
     builder.addCase(createContact.rejected, (state, action) => {
-      console.log('error', action)
       state.loading = false;
-      state.contacts = state.contacts;
-      state.error = ''
       state.errorCreate = action.error.message;
     })
   },
@@ -81,4 +81,6 @@ const store = configureStore({
   }
 });
 
+
+export const { removeError } = contactsSlice.actions;
 export default store;

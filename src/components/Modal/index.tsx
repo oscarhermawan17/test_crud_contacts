@@ -16,7 +16,7 @@ const Modal = ({
           {children}
         </S.Body>
         <S.Footer>
-          <Button variant={"error"} onClick={onAction}>{onActionTitle}</Button> &nbsp;
+          {onAction && <Button variant={"error"} onClick={onAction}>{onActionTitle}</Button>} &nbsp;
           <Button onClick={cancel}>{cancelTitle}</Button>
         </S.Footer>
       </S.Content>
