@@ -1,14 +1,19 @@
 import styled from 'styled-components'
 
 const Styles = {
-  WrapperMainPage: styled.div`
-    
-  `,
   Contacts: styled.div`
     margin-top: 1rem;
     display: grid;
     gap: 1rem 1rem;
     grid-template-columns: auto auto auto;
+    @media (max-width: 1020px) {
+      gap: 1rem 1rem;
+      grid-template-columns: auto auto;
+    }
+    @media (max-width: 720px) {
+      gap: 1rem 1rem;
+      grid-template-columns: auto;
+    }
   `,
   InputText: styled.input`
     width: 100%;

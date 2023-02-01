@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 const Styles = {
   WrapperForm: styled.div`
+    padding: 0 1.25rem;
   `,
   InputText: styled.input`
     width: 100%;

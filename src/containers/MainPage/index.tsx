@@ -123,7 +123,7 @@ const MainPage = () => {
   }
 
   return (
-    <S.WrapperMainPage>
+    <>
       {displayModal &&
         <Modal {...modal}>
           <Form onChange={({ value, entity }) => changeValue(value, entity)} value={formContact} />
@@ -149,7 +149,7 @@ const MainPage = () => {
           />
         )}
       </S.Contacts>
-    </S.WrapperMainPage>
+    </>
   )
 }
 

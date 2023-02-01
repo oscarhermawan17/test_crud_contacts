@@ -23,8 +23,8 @@ const setModalDelete = (setModal, setDisplayModal, onDelete, id) => {
   setModal((prevState) => {
     return {
       ...prevState,
-      onAction: () => {},
-      cancelTitle: 'No', // () => onDelete(id)
+      onAction: () => {}, // () => onDelete(id)
+      cancelTitle: 'No', 
     }
   })
   setDisplayModal('delete');

@@ -8,7 +8,8 @@ const Styles = {
     display: flex;
     justify-content: space-between;
     :hover {
-      border: solid 1px gray;
+      border: solid 2px gray;
+      box-shadow: 1px 1px;
     }
   `,
   WrapperRead: styled.div`
