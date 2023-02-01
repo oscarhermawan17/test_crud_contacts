@@ -7,48 +7,20 @@ import Card from '../../components/Card';
 import Modal from '../../components/Modal'
 import { Styles as S } from './MainPage.style';
 
-// Dummies data
-// const dummies = [{
-//   id: 1,
-//   firstName: 'Dummy',
-//   lastName: 'Data',
-//   age: 1,
-//   photo: 'www.photo.com'
-// },{
-//   id: 2,
-//   firstName: 'Yahoo',
-//   lastName: 'Google',
-//   age: 1,
-//   photo: 'www.photo.com'
-// },{
-//   id: 3,
-//   firstName: 'Oke',
-//   lastName: 'Boys',
-//   age: 1,
-//   photo: 'www.photo.com'
-// },{
-//   id: 4,
-//   firstName: 'Facebook',
-//   lastName: 'Instagram',
-//   age: 1,
-//   photo: 'www.photo.com'
-// }]
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchContacts } from '../../app/store';
 
-const getData = async (setContacts) => {
-  try {
-    const response = await axios.get('https://contact.herokuapp.com/contact');
-    setContacts(response.data.data);
-  } catch (error) {
-    setContacts([]);
-  }
-}
-
-const onDelete = (id, contacts, setContacts) => {
-  const tmp = contacts.filter((contact) => id !== contact.id)
-  setContacts(tmp);
+const onDelete = (id, contactsBaru) => {
+  const tmp = contactsBaru.filter((contact) => id !== contact.id)
+  // setContacts(tmp); dispatch
 }
 
 const MainPage = () => {
+  const contactsBaru = useSelector((state) => state.contacts.contacts);
+  const loading = useSelector((state) => state.contacts.loading);
+  const error = useSelector((state) => state.contacts.error);
+  const dispatch = useDispatch();
+
   const [displayModal, setDisplayModal] = useState(false);
   const modal = {
     onAction: () => {},
@@ -56,7 +28,6 @@ const MainPage = () => {
     cancel: () => setDisplayModal(false),
     cancelTitle: 'Cancel',
   }
-  const [contacts, setContacts] = useState([])
   const [formContact, setFormContact] = useState({
     firstName: '',
     lastName: '',
@@ -65,20 +36,28 @@ const MainPage = () => {
   })
 
   useEffect(() => {
-    getData(setContacts)
+    dispatch(fetchContacts())
   }, [])
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <S.WrapperMainPage>
+      {console.log('contactsBaru', contactsBaru)}
       {displayModal &&
         <Modal {...modal}>
           <Form/>
         </Modal>}
       <Button onClick={() => setDisplayModal(true)}>Create Contact</Button>
       <S.Contacts>
-        {contacts.map((contact) => 
-          <Card key={contact.id} contact={contact} onDelete={(id) => onDelete(id, contacts, setContacts)} onUpdate={() => {}}/>
+        {contactsBaru.map((contact) =>
+          <Card key={contact.id} contact={contact} onDelete={(id) => onDelete(id, contactsBaru)} onUpdate={() => {}}/>
         )}
       </S.Contacts>
     </S.WrapperMainPage>
