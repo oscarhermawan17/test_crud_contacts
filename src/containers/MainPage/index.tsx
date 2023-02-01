@@ -1,18 +1,31 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Form from '../../components/Form';
 import Button from '../../components/Button';
 import Card from '../../components/Card';
 import Modal from '../../components/Modal'
 import { Styles as S } from './MainPage.style';
+import { fetchContacts, createContact } from '../../app/store';
 
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchContacts } from '../../app/store';
+// Delete Error (API)
+const onDelete = (id, setDisplayModal) => {
+  console.log('delete id', id)
+  setDisplayModal(false);
+}
 
-const onDelete = (id, contactsBaru) => {
-  const tmp = contactsBaru.filter((contact) => id !== contact.id)
-  // setContacts(tmp); dispatch
+const handleCreateContact = (dispatch, formContact, setDisplayModal) => {
+  console.log('handleCreateContact', formContact)
+  dispatch(createContact(formContact));
+  setDisplayModal(false);
+};
+
+const initialFormState = {
+  firstName: '',
+  lastName: '',
+  age: 0,
+  photo: ''
 }
 
 const MainPage = () => {
@@ -23,17 +36,12 @@ const MainPage = () => {
 
   const [displayModal, setDisplayModal] = useState(false);
   const modal = {
-    onAction: () => {},
+    onAction: () => handleCreateContact(dispatch, formContact, setDisplayModal),
     onActionTitle: 'Save',
     cancel: () => setDisplayModal(false),
     cancelTitle: 'Cancel',
   }
-  const [formContact, setFormContact] = useState({
-    firstName: '',
-    lastName: '',
-    age: 0,
-    photo: ''
-  })
+  const [formContact, setFormContact] = useState(initialFormState)
 
   useEffect(() => {
     dispatch(fetchContacts())
@@ -44,20 +52,20 @@ const MainPage = () => {
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div>Error: {error}</div>;
   }
 
   return (
     <S.WrapperMainPage>
-      {console.log('contactsBaru', contactsBaru)}
       {displayModal &&
         <Modal {...modal}>
-          <Form/>
+          <Form onChange={setFormContact} value={formContact} />
         </Modal>}
       <Button onClick={() => setDisplayModal(true)}>Create Contact</Button>
+
       <S.Contacts>
         {contactsBaru.map((contact) =>
-          <Card key={contact.id} contact={contact} onDelete={(id) => onDelete(id, contactsBaru)} onUpdate={() => {}}/>
+          <Card key={contact.id} contact={contact} onDelete={(id) => onDelete(id, setDisplayModal)} onUpdate={() => {}}/>
         )}
       </S.Contacts>
     </S.WrapperMainPage>
