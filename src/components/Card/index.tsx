@@ -69,8 +69,8 @@ const Card = ({ contact, onDelete, onUpdate }: any) => {
         {fullName(contact)}
       </S.Content>
       <S.Action>
-        <S.Image src={UpdateIcon} alt="Update" onClick={onUpdate}/> &nbsp;
-        <S.Image src={DeleteIcon} alt="Delete" onClick={() => setModalDelete(setModal, setDisplayModal, onDelete, contact.id)}/>
+        <S.Image data-testid="test-update" src={UpdateIcon} alt="Update" onClick={onUpdate}/> &nbsp;
+        <S.Image data-testid="test-delete" src={DeleteIcon} alt="Delete" onClick={() => setModalDelete(setModal, setDisplayModal, onDelete, contact.id)}/>
       </S.Action>
     </S.WrapperCard>
   )
